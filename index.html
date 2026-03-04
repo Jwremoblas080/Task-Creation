@@ -317,57 +317,43 @@
     <p class="subtitle">Create and track operational tasks</p>
     
     <form id="taskForm">
-      <!-- Task Name -->
+      <!-- Requested By -->
       <div class="form-group">
-        <label for="taskName">Task Name <span class="required">*</span></label>
+        <label for="requestedBy">Requested By <span class="required">*</span></label>
         <input 
           type="text" 
-          id="taskName" 
-          name="taskName" 
-          required 
-          maxlength="200"
-          placeholder="Enter task name"
-        >
-        <span class="error-message" id="taskNameError"></span>
-      </div>
-
-      <!-- Description -->
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea 
-          id="description" 
-          name="description" 
-          maxlength="1000"
-          placeholder="Enter task description (optional)"
-        ></textarea>
-        <span class="char-count" id="descriptionCount">0 / 1000</span>
-        <span class="error-message" id="descriptionError"></span>
-      </div>
-
-      <!-- Priority -->
-      <div class="form-group">
-        <label for="priority">Priority <span class="required">*</span></label>
-        <select id="priority" name="priority" required>
-          <option value="">Select priority</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-        <span class="error-message" id="priorityError"></span>
-      </div>
-
-      <!-- User (Assigned To) -->
-      <div class="form-group">
-        <label for="user">Assigned To <span class="required">*</span></label>
-        <input 
-          type="text" 
-          id="user" 
-          name="user" 
+          id="requestedBy" 
+          name="requestedBy" 
           required 
           maxlength="100"
-          placeholder="Enter assignee name"
+          placeholder="Enter your name"
         >
-        <span class="error-message" id="userError"></span>
+        <span class="error-message" id="requestedByError"></span>
+      </div>
+
+      <!-- Assigned Team -->
+      <div class="form-group">
+        <label for="assignedTeam">Assigned Team <span class="required">*</span></label>
+        <select id="assignedTeam" name="assignedTeam" required>
+          <option value="">Select team</option>
+          <option value="Creatives">Creatives</option>
+          <option value="Dev">Dev</option>
+        </select>
+        <span class="error-message" id="assignedTeamError"></span>
+      </div>
+
+      <!-- Task Description -->
+      <div class="form-group">
+        <label for="taskDescription">Task Description <span class="required">*</span></label>
+        <textarea 
+          id="taskDescription" 
+          name="taskDescription" 
+          required
+          maxlength="1000"
+          placeholder="Enter task description"
+        ></textarea>
+        <span class="char-count" id="taskDescriptionCount">0 / 1000</span>
+        <span class="error-message" id="taskDescriptionError"></span>
       </div>
 
       <!-- Form Actions -->
@@ -423,36 +409,32 @@
     // VALIDATION
     // ========================================================================
 
-    function validateTaskName(value) {
+    function validateRequestedBy(value) {
       if (!value || value.trim().length === 0) {
-        return 'Task name is required';
+        return 'Requested By is required';
       }
-      if (value.length > 200) {
-        return 'Task name must not exceed 200 characters';
-      }
-      return null;
-    }
-
-    function validateDescription(value) {
-      if (value && value.length > 1000) {
-        return 'Description must not exceed 1000 characters';
+      if (value.length > 100) {
+        return 'Requested By must not exceed 100 characters';
       }
       return null;
     }
 
-    function validatePriority(value) {
+    function validateAssignedTeam(value) {
       if (!value) {
-        return 'Priority is required';
+        return 'Assigned Team is required';
       }
-      if (!['High', 'Medium', 'Low'].includes(value)) {
-        return 'Invalid priority value';
+      if (!['Creatives', 'Dev'].includes(value)) {
+        return 'Invalid team selection';
       }
       return null;
     }
 
-    function validateUser(value) {
+    function validateTaskDescription(value) {
       if (!value || value.trim().length === 0) {
-        return 'Assigned To is required';
+        return 'Task Description is required';
+      }
+      if (value.length > 1000) {
+        return 'Task Description must not exceed 1000 characters';
       }
       return null;
     }
@@ -478,40 +460,31 @@
     function validateForm() {
       let isValid = true;
       
-      // Validate task name
-      const taskNameError = validateTaskName(document.getElementById('taskName').value);
-      if (taskNameError) {
-        showError('taskName', taskNameError);
+      // Validate requested by
+      const requestedByError = validateRequestedBy(document.getElementById('requestedBy').value);
+      if (requestedByError) {
+        showError('requestedBy', requestedByError);
         isValid = false;
       } else {
-        hideError('taskName');
+        hideError('requestedBy');
       }
       
-      // Validate description
-      const descriptionError = validateDescription(document.getElementById('description').value);
-      if (descriptionError) {
-        showError('description', descriptionError);
+      // Validate assigned team
+      const assignedTeamError = validateAssignedTeam(document.getElementById('assignedTeam').value);
+      if (assignedTeamError) {
+        showError('assignedTeam', assignedTeamError);
         isValid = false;
       } else {
-        hideError('description');
+        hideError('assignedTeam');
       }
       
-      // Validate priority
-      const priorityError = validatePriority(document.getElementById('priority').value);
-      if (priorityError) {
-        showError('priority', priorityError);
+      // Validate task description
+      const taskDescriptionError = validateTaskDescription(document.getElementById('taskDescription').value);
+      if (taskDescriptionError) {
+        showError('taskDescription', taskDescriptionError);
         isValid = false;
       } else {
-        hideError('priority');
-      }
-      
-      // Validate user
-      const userError = validateUser(document.getElementById('user').value);
-      if (userError) {
-        showError('user', userError);
-        isValid = false;
-      } else {
-        hideError('user');
+        hideError('taskDescription');
       }
       
       return isValid;
@@ -537,10 +510,9 @@
       
       // Collect form data
       const formData = {
-        taskName: document.getElementById('taskName').value.trim(),
-        description: document.getElementById('description').value.trim(),
-        priority: document.getElementById('priority').value,
-        user: document.getElementById('user').value.trim()
+        requestedBy: document.getElementById('requestedBy').value.trim(),
+        assignedTeam: document.getElementById('assignedTeam').value,
+        taskDescription: document.getElementById('taskDescription').value.trim()
       };
       
       // Show loading
@@ -569,7 +541,7 @@
         
         // Reset form
         document.getElementById('taskForm').reset();
-        document.getElementById('descriptionCount').textContent = '0 / 1000';
+        document.getElementById('taskDescriptionCount').textContent = '0 / 1000';
         
       } catch (error) {
         console.error('Error submitting task:', error);
@@ -603,9 +575,9 @@
     }
 
     function updateCharCount() {
-      const description = document.getElementById('description');
-      const charCount = document.getElementById('descriptionCount');
-      const currentLength = description.value.length;
+      const taskDescription = document.getElementById('taskDescription');
+      const charCount = document.getElementById('taskDescriptionCount');
+      const currentLength = taskDescription.value.length;
       
       charCount.textContent = currentLength + ' / 1000';
       
@@ -627,33 +599,33 @@
       document.getElementById('taskForm').addEventListener('submit', handleSubmit);
       
       // Character count
-      document.getElementById('description').addEventListener('input', updateCharCount);
+      document.getElementById('taskDescription').addEventListener('input', updateCharCount);
       
       // Real-time validation
-      document.getElementById('taskName').addEventListener('blur', function() {
-        const error = validateTaskName(this.value);
+      document.getElementById('requestedBy').addEventListener('blur', function() {
+        const error = validateRequestedBy(this.value);
         if (error) {
-          showError('taskName', error);
+          showError('requestedBy', error);
         } else {
-          hideError('taskName');
+          hideError('requestedBy');
         }
       });
       
-      document.getElementById('priority').addEventListener('change', function() {
-        const error = validatePriority(this.value);
+      document.getElementById('assignedTeam').addEventListener('change', function() {
+        const error = validateAssignedTeam(this.value);
         if (error) {
-          showError('priority', error);
+          showError('assignedTeam', error);
         } else {
-          hideError('priority');
+          hideError('assignedTeam');
         }
       });
       
-      document.getElementById('user').addEventListener('blur', function() {
-        const error = validateUser(this.value);
+      document.getElementById('taskDescription').addEventListener('blur', function() {
+        const error = validateTaskDescription(this.value);
         if (error) {
-          showError('user', error);
+          showError('taskDescription', error);
         } else {
-          hideError('user');
+          hideError('taskDescription');
         }
       });
     });
