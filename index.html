@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Request System</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Container */
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+      width: 100%;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a5568;
+      margin-bottom: 8px;
+    }
+
+    .required {
+      color: #e53e3e;
+      font-weight: 600;
+    }
+
+    /* Input Fields */
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #2d3748;
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    input[type="text"]:hover,
+    input[type="date"]:hover,
+    textarea:hover,
+    select:hover {
+      border-color: #cbd5e0;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    /* Character Count */
+    .char-count {
+      display: block;
+      font-size: 12px;
+      color: #718096;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    /* Error and Warning Messages */
+    .error-message,
+    .warning-message {
+      display: none;
+      font-size: 13px;
+      margin-top: 6px;
+      min-height: 18px;
+    }
+
+    .error-message {
+      color: #e53e3e;
+      font-weight: 500;
+    }
+
+    .warning-message {
+      color: #dd6b20;
+      font-weight: 500;
+    }
+
+    input.invalid,
+    textarea.invalid,
+    select.invalid {
+      border-color: #e53e3e;
+      background-color: #fff5f5;
+    }
+
+    input.invalid:focus,
+    textarea.invalid:focus,
+    select.invalid:focus {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    }
+
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    /* Buttons */
+    .btn {
+      flex: 1;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #4a5568;
+      border: 2px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: #f7fafc;
+      border-color: #cbd5e0;
+    }
+
+    .btn-secondary:active {
+      background: #edf2f7;
+    }
+
+    /* Loading Indicator */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 16px;
+      background: #edf2f7;
+      border-radius: 8px;
+      color: #4a5568;
+      font-size: 14px;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Messages */
+    .message {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      position: relative;
+    }
+
+    .message.success {
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      color: #166534;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      border: 2px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    .message-icon {
+      font-size: 20px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .message-text {
+      flex: 1;
+    }
+
+    .message-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.6;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease;
+    }
+
+    .message-close:hover {
+      opacity: 1;
+    }
+
+    /* Responsive Design - Tablet (768px - 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .container {
+        max-width: 700px;
+        padding: 36px;
+      }
+
+      h1 {
+        font-size: 26px;
+        margin-bottom: 28px;
+      }
+
+      .form-group {
+        margin-bottom: 22px;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      textarea,
+      select {
+        padding: 14px 16px;
+        font-size: 16px;
+        min-height: 48px;
+      }
+
+      .btn {
+        padding: 16px 24px;
+        font-size: 16px;
+        min-height: 52px;
+      }
+
+      textarea {
+        min-height: 140px;
+      }
+    }
+
+    /* Responsive Design - Mobile (max-width: 768px) */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 24px;
+        border-radius: 8px;
+        margin-top: 16px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-size: 15px;
+        margin-bottom: 8px;
+      }
+
+      /* Ensure touch targets are minimum 44x44 pixels */
+      input[type="text"],
+      input[type="date"],
+      textarea,
+      select {
+        padding: 14px 16px;
+        font-size: 16px;
+        min-height: 48px;
+      }
+
+      textarea {
+        min-height: 120px;
+      }
+
+      select {
+        background-position: right 12px center;
+        padding-right: 36px;
+      }
+
+      /* Stack buttons vertically on mobile */
+      .form-actions {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px 24px;
+        font-size: 16px;
+        min-height: 52px;
+      }
+
+      /* Adjust message padding for mobile */
+      .message {
+        padding: 14px 16px;
+        font-size: 14px;
+      }
+
+      .loading {
+        padding: 14px;
+        font-size: 14px;
+      }
+
+      .char-count {
+        font-size: 13px;
+      }
+
+      .error-message,
+      .warning-message {
+        font-size: 13px;
+      }
+    }
+
+    /* Extra small mobile devices (max-width: 480px) */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      label {
+        font-size: 14px;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      textarea,
+      select {
+        font-size: 16px;
+        padding: 12px 14px;
+      }
+
+      .btn {
+        padding: 14px 20px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Submit Task Request</h1>
+    
+    <form id="taskForm">
+      <!-- Requested By Field -->
+      <div class="form-group">
+        <label for="requestedBy">Requested By <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="requestedBy" 
+          name="requestedBy" 
+          required 
+          maxlength="100"
+          placeholder="Enter your name"
+        >
+        <span class="error-message" id="requestedByError"></span>
+      </div>
+
+      <!-- Assigned Team Field -->
+      <div class="form-group">
+        <label for="assignedTeam">Assigned Team <span class="required">*</span></label>
+        <select id="assignedTeam" name="assignedTeam" required>
+          <option value="">Select team</option>
+          <option value="Creatives">Creatives</option>
+          <option value="Dev">Dev</option>
+        </select>
+        <span class="error-message" id="assignedTeamError"></span>
+      </div>
+
+      <!-- Task Description Field -->
+      <div class="form-group">
+        <label for="taskDescription">Task Description <span class="required">*</span></label>
+        <textarea 
+          id="taskDescription" 
+          name="taskDescription" 
+          required
+          maxlength="1000"
+          rows="5"
+          placeholder="Enter detailed task description"
+        ></textarea>
+        <span class="char-count" id="taskDescriptionCount">0 / 1000</span>
+        <span class="error-message" id="taskDescriptionError"></span>
+      </div>
+
+      <!-- Form Buttons -->
+      <div class="form-actions">
+        <button type="submit" id="submitBtn" class="btn btn-primary">
+          Submit Request
+        </button>
+        <button type="reset" id="resetBtn" class="btn btn-secondary">
+          Clear Form
+        </button>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="loadingIndicator" class="loading" style="display: none;">
+        <span class="spinner"></span>
+        <span>Submitting request...</span>
+      </div>
+
+      <!-- Success Message -->
+      <div id="successMessage" class="message success" style="display: none;">
+        <span class="message-icon">✓</span>
+        <span class="message-text"></span>
+        <button class="message-close" onclick="closeMessage('successMessage')">&times;</button>
+      </div>
+
+      <!-- Error Message -->
+      <div id="errorMessage" class="message error" style="display: none;">
+        <span class="message-icon">✗</span>
+        <span class="message-text"></span>
+        <button class="message-close" onclick="closeMessage('errorMessage')">&times;</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // ============================================================================
+    // VALIDATION FUNCTIONS
+    // ============================================================================
+
+    /**
+     * Validate requested by field
+     * Requirements: Field must be required and 1-100 characters
+     * 
+     * @param {string} requestedBy - The name to validate
+     * @returns {Object} Validation result with isValid and error message
+     */
+    function validateRequestedBy(requestedBy) {
+      // Check if empty or only whitespace
+      if (!requestedBy || requestedBy.trim().length === 0) {
+        return {
+          isValid: false,
+          error: 'Requested By is required'
+        };
+      }
+      
+      // Check minimum length (at least 1 character after trim)
+      if (requestedBy.trim().length < 1) {
+        return {
+          isValid: false,
+          error: 'Name must be at least 1 character'
+        };
+      }
+      
+      // Check maximum length
+      if (requestedBy.length > 100) {
+        return {
+          isValid: false,
+          error: 'Name must not exceed 100 characters'
+        };
+      }
+      
+      return {
+        isValid: true,
+        error: ''
+      };
+    }
+
+    /**
+     * Validate assigned team field
+     * Requirements: Must be one of predefined values
+     * 
+     * @param {string} assignedTeam - The team value to validate
+     * @returns {Object} Validation result with isValid and error message
+     */
+    function validateAssignedTeam(assignedTeam) {
+      const validTeams = ['Creatives', 'Dev'];
+      
+      // Check if empty
+      if (!assignedTeam || assignedTeam.trim().length === 0) {
+        return {
+          isValid: false,
+          error: 'Assigned Team is required'
+        };
+      }
+      
+      // Check if value is in predefined list
+      if (!validTeams.includes(assignedTeam)) {
+        return {
+          isValid: false,
+          error: 'Assigned Team must be Creatives or Dev'
+        };
+      }
+      
+      return {
+        isValid: true,
+        error: ''
+      };
+    }
+
+    /**
+     * Validate task description field
+     * Requirements: Required field, must not exceed 1000 characters
+     * 
+     * @param {string} taskDescription - The description to validate
+     * @returns {Object} Validation result with isValid and error message
+     */
+    function validateTaskDescription(taskDescription) {
+      // Check if empty or only whitespace
+      if (!taskDescription || taskDescription.trim().length === 0) {
+        return {
+          isValid: false,
+          error: 'Task Description is required'
+        };
+      }
+      
+      // Check maximum length
+      if (taskDescription.length > 1000) {
+        return {
+          isValid: false,
+          error: 'Task Description must not exceed 1000 characters'
+        };
+      }
+      
+      return {
+        isValid: true,
+        error: ''
+      };
+    }
+
+    /**
+     * Validate entire form
+     * Runs all field validations and returns overall result
+     * 
+     * @returns {Object} Validation result with isValid and errors object
+     */
+    function validateForm() {
+      const requestedBy = document.getElementById('requestedBy').value;
+      const assignedTeam = document.getElementById('assignedTeam').value;
+      const taskDescription = document.getElementById('taskDescription').value;
+      
+      const requestedByResult = validateRequestedBy(requestedBy);
+      const assignedTeamResult = validateAssignedTeam(assignedTeam);
+      const taskDescriptionResult = validateTaskDescription(taskDescription);
+      
+      const isValid = requestedByResult.isValid && 
+                      assignedTeamResult.isValid && 
+                      taskDescriptionResult.isValid;
+      
+      return {
+        isValid: isValid,
+        errors: {
+          requestedBy: requestedByResult.error,
+          assignedTeam: assignedTeamResult.error,
+          taskDescription: taskDescriptionResult.error
+        }
+      };
+    }
+
+    // ============================================================================
+    // UTILITY FUNCTIONS
+    // ============================================================================
+
+    /**
+     * Close message notification
+     * @param {string} messageId - ID of the message element to close
+     */
+    function closeMessage(messageId) {
+      document.getElementById(messageId).style.display = 'none';
+    }
+
+    /**
+     * Update character count for task description field
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+      const taskDescriptionField = document.getElementById('taskDescription');
+      const charCount = document.getElementById('taskDescriptionCount');
+      
+      if (taskDescriptionField && charCount) {
+        taskDescriptionField.addEventListener('input', function() {
+          const currentLength = this.value.length;
+          charCount.textContent = currentLength + ' / 1000';
+          
+          // Visual feedback when approaching limit
+          if (currentLength > 900) {
+            charCount.style.color = '#ff0000';
+          } else if (currentLength > 800) {
+            charCount.style.color = '#ff8c00';
+          } else {
+            charCount.style.color = '#666';
+          }
+        });
+      }
+    });
+
+    // ============================================================================
+    // VISUAL FEEDBACK FOR VALIDATION ERRORS
+    // ============================================================================
+
+    /**
+     * Show error message for a field
+     * @param {string} fieldId - ID of the field
+     * @param {string} errorMessage - Error message to display
+     */
+    function showError(fieldId, errorMessage) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(fieldId + 'Error');
+      
+      if (field && errorElement) {
+        field.classList.add('invalid');
+        errorElement.textContent = errorMessage;
+        errorElement.style.display = 'block';
+      }
+    }
+
+    /**
+     * Hide error message for a field
+     * @param {string} fieldId - ID of the field
+     */
+    function hideError(fieldId) {
+      const field = document.getElementById(fieldId);
+      const errorElement = document.getElementById(fieldId + 'Error');
+      
+      if (field && errorElement) {
+        field.classList.remove('invalid');
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+      }
+    }
+
+    /**
+     * Show warning message for a field
+     * @param {string} fieldId - ID of the field
+     * @param {string} warningMessage - Warning message to display
+     */
+    function showWarning(fieldId, warningMessage) {
+      const warningElement = document.getElementById(fieldId + 'Warning');
+      
+      if (warningElement) {
+        warningElement.textContent = warningMessage;
+        warningElement.style.display = 'block';
+      }
+    }
+
+    /**
+     * Hide warning message for a field
+     * @param {string} fieldId - ID of the field
+     */
+    function hideWarning(fieldId) {
+      const warningElement = document.getElementById(fieldId + 'Warning');
+      
+      if (warningElement) {
+        warningElement.textContent = '';
+        warningElement.style.display = 'none';
+      }
+    }
+
+    /**
+     * Validate and show feedback for requested by field
+     */
+    function validateRequestedByField() {
+      const requestedBy = document.getElementById('requestedBy').value;
+      const result = validateRequestedBy(requestedBy);
+      
+      if (!result.isValid) {
+        showError('requestedBy', result.error);
+      } else {
+        hideError('requestedBy');
+      }
+      
+      return result.isValid;
+    }
+
+    /**
+     * Validate and show feedback for assigned team field
+     */
+    function validateAssignedTeamField() {
+      const assignedTeam = document.getElementById('assignedTeam').value;
+      const result = validateAssignedTeam(assignedTeam);
+      
+      if (!result.isValid) {
+        showError('assignedTeam', result.error);
+      } else {
+        hideError('assignedTeam');
+      }
+      
+      return result.isValid;
+    }
+
+    /**
+     * Validate and show feedback for task description field
+     */
+    function validateTaskDescriptionField() {
+      const taskDescription = document.getElementById('taskDescription').value;
+      const result = validateTaskDescription(taskDescription);
+      
+      if (!result.isValid) {
+        showError('taskDescription', result.error);
+      } else {
+        hideError('taskDescription');
+      }
+      
+      return result.isValid;
+    }
+
+    // ============================================================================
+    // SUBMIT BUTTON ENABLE/DISABLE LOGIC
+    // ============================================================================
+
+    /**
+     * Check if all required fields are valid
+     * Requirements: Enable submit button only when all required fields are valid
+     * 
+     * @returns {boolean} True if form is valid and can be submitted
+     */
+    function isFormValid() {
+      const requestedBy = document.getElementById('requestedBy').value;
+      const assignedTeam = document.getElementById('assignedTeam').value;
+      const taskDescription = document.getElementById('taskDescription').value;
+      
+      // Validate all fields
+      const requestedByResult = validateRequestedBy(requestedBy);
+      const assignedTeamResult = validateAssignedTeam(assignedTeam);
+      const taskDescriptionResult = validateTaskDescription(taskDescription);
+      
+      // All required fields must be valid
+      return requestedByResult.isValid && 
+             assignedTeamResult.isValid && 
+             taskDescriptionResult.isValid;
+    }
+
+    /**
+     * Update submit button state based on form validity
+     * Enables button when all required fields are valid, disables otherwise
+     */
+    function updateSubmitButtonState() {
+      const submitBtn = document.getElementById('submitBtn');
+      
+      if (submitBtn) {
+        if (isFormValid()) {
+          submitBtn.disabled = false;
+        } else {
+          submitBtn.disabled = true;
+        }
+      }
+    }
+
+    /**
+     * Disable submit button during form submission
+     * Requirements: 4.5 - Disable during form submission
+     */
+    function disableSubmitButton() {
+      const submitBtn = document.getElementById('submitBtn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+    }
+
+    /**
+     * Enable submit button after form submission completes
+     */
+    function enableSubmitButton() {
+      const submitBtn = document.getElementById('submitBtn');
+      if (submitBtn && isFormValid()) {
+        submitBtn.disabled = false;
+      }
+    }
+
+    // ============================================================================
+    // FORM SUBMISSION HANDLING
+    // ============================================================================
+
+    /**
+     * Handle form submission
+     * Requirements: 5.1, 5.2 - Process form submission and show loading indicator
+     */
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      // Validate form before submission
+      const validation = validateForm();
+      if (!validation.isValid) {
+        // Show validation errors
+        if (validation.errors.requestedBy) showError('requestedBy', validation.errors.requestedBy);
+        if (validation.errors.assignedTeam) showError('assignedTeam', validation.errors.assignedTeam);
+        if (validation.errors.taskDescription) showError('taskDescription', validation.errors.taskDescription);
+        return;
+      }
+      
+      // Disable submit button during submission
+      disableSubmitButton();
+      
+      // Show loading indicator
+      document.getElementById('loadingIndicator').style.display = 'flex';
+      
+      // Hide any previous messages
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+      
+      // Collect form data into object
+      const formData = collectFormData();
+      
+      // Send data to Google Apps Script backend
+      submitTaskToBackend(formData);
+    }
+
+    /**
+     * Collect form data into a structured object
+     * Requirements: Collect form data into object
+     * 
+     * @returns {Object} Form data object with all field values
+     */
+    function collectFormData() {
+      return {
+        requestedBy: document.getElementById('requestedBy').value.trim(),
+        assignedTeam: document.getElementById('assignedTeam').value,
+        taskDescription: document.getElementById('taskDescription').value.trim()
+      };
+    }
+
+    /**
+     * Submit task data to Google Apps Script backend
+     * Requirements: 5.1 - Send data to Google Apps Script backend
+     * 
+     * @param {Object} formData - Task data to submit
+     */
+    function submitTaskToBackend(formData) {
+      // Check if we're running in Google Apps Script environment
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        // Use google.script.run for Google Apps Script environment
+        console.log('Using google.script.run to submit form');
+        console.log('Form data:', formData);
+        
+        google.script.run
+          .withSuccessHandler(handleSubmissionSuccess)
+          .withFailureHandler(handleSubmissionError)
+          .processFormSubmission(formData);
+      } else {
+        // Fallback to fetch for testing or when deployed as web app
+        const scriptUrl = window.location.href;
+        
+        // Create URL-encoded form data for POST request
+        const postData = new URLSearchParams();
+        postData.append('requestedBy', formData.requestedBy);
+        postData.append('assignedTeam', formData.assignedTeam);
+        postData.append('taskDescription', formData.taskDescription);
+        
+        // Send POST request to backend
+        fetch(scriptUrl, {
+          method: 'POST',
+          body: postData,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+        .then(function(response) {
+          // Check if response is HTML (error case)
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('text/html')) {
+            throw new Error('Received HTML response instead of JSON. Check if the web app is properly deployed.');
+          }
+          
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(function(data) {
+          handleSubmissionSuccess(data);
+        })
+        .catch(function(error) {
+          handleSubmissionError(error);
+        });
+      }
+    }
+
+    /**
+     * Handle successful form submission
+     * Requirements: 5.3, 5.5 - Display success message and clear form
+     * 
+     * @param {Object} response - Response data from backend
+     */
+    function handleSubmissionSuccess(response) {
+      // Hide loading indicator
+      document.getElementById('loadingIndicator').style.display = 'none';
+      
+      // Log the response for debugging
+      console.log('Received response:', response);
+      console.log('Response type:', typeof response);
+      
+      // Check if response is valid
+      if (!response || typeof response !== 'object') {
+        console.error('Invalid response format');
+        handleSubmissionError(new Error('Invalid response from server'));
+        return;
+      }
+      
+      if (response.success) {
+        console.log('Submission successful!');
+        // Show success message
+        const successMessage = document.getElementById('successMessage');
+        const successText = successMessage.querySelector('.message-text');
+        successText.textContent = response.message || 'Task request submitted successfully!';
+        successMessage.style.display = 'flex';
+        
+        // Clear form fields
+        document.getElementById('taskForm').reset();
+        
+        // Reset character count
+        document.getElementById('taskDescriptionCount').textContent = '0 / 1000';
+        document.getElementById('taskDescriptionCount').style.color = '#666';
+        
+        // Clear any validation errors
+        hideError('requestedBy');
+        hideError('assignedTeam');
+        hideError('taskDescription');
+        
+        // Update submit button state
+        updateSubmitButtonState();
+      } else {
+        console.log('Submission failed on server');
+        console.log('Server message:', response.message);
+        console.log('Server errors:', response.errors);
+        
+        // Show error message even if response says not successful
+        const errorMsg = response.message || 'Submission failed';
+        const errors = response.errors || [];
+        
+        let fullErrorMsg = errorMsg;
+        if (errors.length > 0) {
+          fullErrorMsg += '\n\nErrors:\n';
+          errors.forEach(function(error) {
+            if (typeof error === 'object' && error.field && error.message) {
+              fullErrorMsg += '- ' + error.field + ': ' + error.message + '\n';
+            } else if (typeof error === 'string') {
+              fullErrorMsg += '- ' + error + '\n';
+            }
+          });
+        }
+        
+        handleSubmissionError(new Error(fullErrorMsg));
+      }
+    }ccess: false
+        handleSubmissionError(new Error(response.message || 'Submission failed'));
+      }
+    }
+
+    /**
+     * Handle form submission error
+     * Requirements: 5.4 - Display error message with details
+     * 
+     * @param {Error|string} error - Error object or message
+     */
+    function handleSubmissionError(error) {
+      // Hide loading indicator
+      document.getElementById('loadingIndicator').style.display = 'none';
+      
+      // Convert error to string if it's an Error object
+      let errorMessage = '';
+      if (error && typeof error === 'object' && error.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else {
+        errorMessage = 'An unknown error occurred';
+      }
+      
+      // Show error message with helpful guidance
+      const errorMessageEl = document.getElementById('errorMessage');
+      const errorText = errorMessageEl.querySelector('.message-text');
+      
+      let errorMsg = 'Failed to submit request: ' + errorMessage;
+      
+      // Add specific guidance for common issues
+      if (errorMessage.includes('HTML response instead of JSON')) {
+        errorMsg += '\n\nThis usually means the Google Apps Script web app is not properly deployed. Please ensure:\n1. The script is deployed as a web app\n2. Execute as: "Me"\n3. Who has access: "Anyone" or "Anyone with the link"\n4. You are accessing the deployed web app URL, not the script editor URL';
+      } else if (errorMessage.includes('Network response was not ok')) {
+        errorMsg += '\n\nPlease check your internet connection and try again.';
+      } else if (errorMessage.includes('Could not access spreadsheet')) {
+        errorMsg += '\n\nPlease ensure:\n1. A SPREADSHEET_ID is configured in Script Properties, OR\n2. The script has permission to create a new spreadsheet\n3. Check the execution logs for more details';
+      }
+      
+      errorText.textContent = errorMsg;
+      errorMessageEl.style.display = 'flex';
+      
+      // Re-enable submit button for retry
+      enableSubmitButton();
+      
+      // Log error for debugging
+      console.error('Form submission error:', error);
+      console.log('Error type:', typeof error);
+      console.log('Error details:', error);
+      console.log('Current URL:', window.location.href);
+      console.log('Google Apps Script available:', typeof google !== 'undefined' && google.script);
+    }
+
+    /**
+     * Attach validation event listeners to form fields
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+      const requestedByField = document.getElementById('requestedBy');
+      const assignedTeamField = document.getElementById('assignedTeam');
+      const taskDescriptionField = document.getElementById('taskDescription');
+      const form = document.getElementById('taskForm');
+      
+      // Initialize submit button state on page load
+      updateSubmitButtonState();
+      
+      // Attach form submit handler
+      if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+      }
+      
+      // Requested By validation on blur and input
+      if (requestedByField) {
+        requestedByField.addEventListener('blur', function() {
+          validateRequestedByField();
+          updateSubmitButtonState();
+        });
+        requestedByField.addEventListener('input', function() {
+          // Only validate if field has been touched (has error class)
+          if (this.classList.contains('invalid')) {
+            validateRequestedByField();
+          }
+          updateSubmitButtonState();
+        });
+      }
+      
+      // Assigned Team validation on change
+      if (assignedTeamField) {
+        assignedTeamField.addEventListener('change', function() {
+          validateAssignedTeamField();
+          updateSubmitButtonState();
+        });
+        assignedTeamField.addEventListener('blur', function() {
+          validateAssignedTeamField();
+          updateSubmitButtonState();
+        });
+      }
+      
+      // Task Description validation on input
+      if (taskDescriptionField) {
+        taskDescriptionField.addEventListener('input', function() {
+          validateTaskDescriptionField();
+          updateSubmitButtonState();
+        });
+        taskDescriptionField.addEventListener('blur', function() {
+          validateTaskDescriptionField();
+          updateSubmitButtonState();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
