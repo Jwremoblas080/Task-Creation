@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Request System</title>
+  <title>Operations Task Creation System</title>
   <style>
-    /* Reset and Base Styles */
+    /* ========================================================================
+       RESET & BASE STYLES
+       ======================================================================== */
     * {
       margin: 0;
       padding: 0;
@@ -24,7 +26,9 @@
       color: #333;
     }
 
-    /* Container */
+    /* ========================================================================
+       CONTAINER
+       ======================================================================== */
     .container {
       background: #ffffff;
       border-radius: 12px;
@@ -38,11 +42,20 @@
       font-size: 28px;
       font-weight: 600;
       color: #2d3748;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       text-align: center;
     }
 
-    /* Form Groups */
+    .subtitle {
+      text-align: center;
+      color: #718096;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    /* ========================================================================
+       FORM ELEMENTS
+       ======================================================================== */
     .form-group {
       margin-bottom: 24px;
     }
@@ -60,9 +73,7 @@
       font-weight: 600;
     }
 
-    /* Input Fields */
     input[type="text"],
-    input[type="date"],
     textarea,
     select {
       width: 100%;
@@ -78,7 +89,6 @@
     }
 
     input[type="text"]:focus,
-    input[type="date"]:focus,
     textarea:focus,
     select:focus {
       border-color: #667eea;
@@ -86,7 +96,6 @@
     }
 
     input[type="text"]:hover,
-    input[type="date"]:hover,
     textarea:hover,
     select:hover {
       border-color: #cbd5e0;
@@ -106,7 +115,6 @@
       padding-right: 40px;
     }
 
-    /* Character Count */
     .char-count {
       display: block;
       font-size: 12px;
@@ -115,23 +123,15 @@
       text-align: right;
     }
 
-    /* Error and Warning Messages */
-    .error-message,
-    .warning-message {
+    /* ========================================================================
+       VALIDATION MESSAGES
+       ======================================================================== */
+    .error-message {
       display: none;
       font-size: 13px;
-      margin-top: 6px;
-      min-height: 18px;
-    }
-
-    .error-message {
       color: #e53e3e;
       font-weight: 500;
-    }
-
-    .warning-message {
-      color: #dd6b20;
-      font-weight: 500;
+      margin-top: 6px;
     }
 
     input.invalid,
@@ -141,21 +141,15 @@
       background-color: #fff5f5;
     }
 
-    input.invalid:focus,
-    textarea.invalid:focus,
-    select.invalid:focus {
-      border-color: #e53e3e;
-      box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
-    }
-
-    /* Form Actions */
+    /* ========================================================================
+       BUTTONS
+       ======================================================================== */
     .form-actions {
       display: flex;
       gap: 12px;
       margin-top: 32px;
     }
 
-    /* Buttons */
     .btn {
       flex: 1;
       padding: 14px 24px;
@@ -175,14 +169,13 @@
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
     }
 
-    .btn-primary:active {
+    .btn-primary:active:not(:disabled) {
       transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     }
 
     .btn-primary:disabled {
@@ -203,13 +196,11 @@
       border-color: #cbd5e0;
     }
 
-    .btn-secondary:active {
-      background: #edf2f7;
-    }
-
-    /* Loading Indicator */
+    /* ========================================================================
+       LOADING & MESSAGES
+       ======================================================================== */
     .loading {
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       gap: 12px;
@@ -219,6 +210,10 @@
       border-radius: 8px;
       color: #4a5568;
       font-size: 14px;
+    }
+
+    .loading.show {
+      display: flex;
     }
 
     .spinner {
@@ -234,16 +229,18 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Messages */
     .message {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 12px;
       margin-top: 24px;
       padding: 16px 20px;
       border-radius: 8px;
       font-size: 14px;
-      position: relative;
+    }
+
+    .message.show {
+      display: flex;
     }
 
     .message.success {
@@ -279,9 +276,6 @@
       padding: 0;
       width: 24px;
       height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       transition: opacity 0.2s ease;
     }
 
@@ -289,43 +283,9 @@
       opacity: 1;
     }
 
-    /* Responsive Design - Tablet (768px - 1024px) */
-    @media (min-width: 768px) and (max-width: 1024px) {
-      .container {
-        max-width: 700px;
-        padding: 36px;
-      }
-
-      h1 {
-        font-size: 26px;
-        margin-bottom: 28px;
-      }
-
-      .form-group {
-        margin-bottom: 22px;
-      }
-
-      input[type="text"],
-      input[type="date"],
-      textarea,
-      select {
-        padding: 14px 16px;
-        font-size: 16px;
-        min-height: 48px;
-      }
-
-      .btn {
-        padding: 16px 24px;
-        font-size: 16px;
-        min-height: 52px;
-      }
-
-      textarea {
-        min-height: 140px;
-      }
-    }
-
-    /* Responsive Design - Mobile (max-width: 768px) */
+    /* ========================================================================
+       RESPONSIVE DESIGN
+       ======================================================================== */
     @media (max-width: 768px) {
       body {
         padding: 16px;
@@ -334,165 +294,86 @@
 
       .container {
         padding: 24px;
-        border-radius: 8px;
         margin-top: 16px;
       }
 
       h1 {
         font-size: 24px;
-        margin-bottom: 24px;
       }
 
-      .form-group {
-        margin-bottom: 20px;
-      }
-
-      label {
-        font-size: 15px;
-        margin-bottom: 8px;
-      }
-
-      /* Ensure touch targets are minimum 44x44 pixels */
-      input[type="text"],
-      input[type="date"],
-      textarea,
-      select {
-        padding: 14px 16px;
-        font-size: 16px;
-        min-height: 48px;
-      }
-
-      textarea {
-        min-height: 120px;
-      }
-
-      select {
-        background-position: right 12px center;
-        padding-right: 36px;
-      }
-
-      /* Stack buttons vertically on mobile */
       .form-actions {
         flex-direction: column;
-        gap: 12px;
-        margin-top: 28px;
       }
 
       .btn {
         width: 100%;
-        padding: 16px 24px;
-        font-size: 16px;
-        min-height: 52px;
-      }
-
-      /* Adjust message padding for mobile */
-      .message {
-        padding: 14px 16px;
-        font-size: 14px;
-      }
-
-      .loading {
-        padding: 14px;
-        font-size: 14px;
-      }
-
-      .char-count {
-        font-size: 13px;
-      }
-
-      .error-message,
-      .warning-message {
-        font-size: 13px;
-      }
-    }
-
-    /* Extra small mobile devices (max-width: 480px) */
-    @media (max-width: 480px) {
-      body {
-        padding: 12px;
-      }
-
-      .container {
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 22px;
-        margin-bottom: 20px;
-      }
-
-      .form-group {
-        margin-bottom: 18px;
-      }
-
-      label {
-        font-size: 14px;
-      }
-
-      input[type="text"],
-      input[type="date"],
-      textarea,
-      select {
-        font-size: 16px;
-        padding: 12px 14px;
-      }
-
-      .btn {
-        padding: 14px 20px;
-        font-size: 15px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Submit Task Request</h1>
+    <h1>Operations Task Creation</h1>
+    <p class="subtitle">Create and track operational tasks</p>
     
     <form id="taskForm">
-      <!-- Requested By Field -->
+      <!-- Task Name -->
       <div class="form-group">
-        <label for="requestedBy">Requested By <span class="required">*</span></label>
+        <label for="taskName">Task Name <span class="required">*</span></label>
         <input 
           type="text" 
-          id="requestedBy" 
-          name="requestedBy" 
+          id="taskName" 
+          name="taskName" 
+          required 
+          maxlength="200"
+          placeholder="Enter task name"
+        >
+        <span class="error-message" id="taskNameError"></span>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          maxlength="1000"
+          placeholder="Enter task description (optional)"
+        ></textarea>
+        <span class="char-count" id="descriptionCount">0 / 1000</span>
+        <span class="error-message" id="descriptionError"></span>
+      </div>
+
+      <!-- Priority -->
+      <div class="form-group">
+        <label for="priority">Priority <span class="required">*</span></label>
+        <select id="priority" name="priority" required>
+          <option value="">Select priority</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <span class="error-message" id="priorityError"></span>
+      </div>
+
+      <!-- User (Assigned To) -->
+      <div class="form-group">
+        <label for="user">Assigned To <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="user" 
+          name="user" 
           required 
           maxlength="100"
-          placeholder="Enter your name"
+          placeholder="Enter assignee name"
         >
-        <span class="error-message" id="requestedByError"></span>
+        <span class="error-message" id="userError"></span>
       </div>
 
-      <!-- Assigned Team Field -->
-      <div class="form-group">
-        <label for="assignedTeam">Assigned Team <span class="required">*</span></label>
-        <select id="assignedTeam" name="assignedTeam" required>
-          <option value="">Select team</option>
-          <option value="Creatives">Creatives</option>
-          <option value="Dev">Dev</option>
-        </select>
-        <span class="error-message" id="assignedTeamError"></span>
-      </div>
-
-      <!-- Task Description Field -->
-      <div class="form-group">
-        <label for="taskDescription">Task Description <span class="required">*</span></label>
-        <textarea 
-          id="taskDescription" 
-          name="taskDescription" 
-          required
-          maxlength="1000"
-          rows="5"
-          placeholder="Enter detailed task description"
-        ></textarea>
-        <span class="char-count" id="taskDescriptionCount">0 / 1000</span>
-        <span class="error-message" id="taskDescriptionError"></span>
-      </div>
-
-      <!-- Form Buttons -->
+      <!-- Form Actions -->
       <div class="form-actions">
         <button type="submit" id="submitBtn" class="btn btn-primary">
-          Submit Request
+          Create Task
         </button>
         <button type="reset" id="resetBtn" class="btn btn-secondary">
           Clear Form
@@ -500,653 +381,281 @@
       </div>
 
       <!-- Loading Indicator -->
-      <div id="loadingIndicator" class="loading" style="display: none;">
+      <div id="loadingIndicator" class="loading">
         <span class="spinner"></span>
-        <span>Submitting request...</span>
+        <span>Creating task...</span>
       </div>
 
       <!-- Success Message -->
-      <div id="successMessage" class="message success" style="display: none;">
+      <div id="successMessage" class="message success">
         <span class="message-icon">✓</span>
         <span class="message-text"></span>
-        <button class="message-close" onclick="closeMessage('successMessage')">&times;</button>
+        <button class="message-close" onclick="closeMessage('successMessage')" type="button">&times;</button>
       </div>
 
       <!-- Error Message -->
-      <div id="errorMessage" class="message error" style="display: none;">
+      <div id="errorMessage" class="message error">
         <span class="message-icon">✗</span>
         <span class="message-text"></span>
-        <button class="message-close" onclick="closeMessage('errorMessage')">&times;</button>
+        <button class="message-close" onclick="closeMessage('errorMessage')" type="button">&times;</button>
       </div>
     </form>
   </div>
 
   <script>
-    // ============================================================================
-    // VALIDATION FUNCTIONS
-    // ============================================================================
-
+    // ========================================================================
+    // CONFIGURATION
+    // ========================================================================
+    
     /**
-     * Validate requested by field
-     * Requirements: Field must be required and 1-100 characters
+     * ⚠️ IMPORTANT: Replace this with your deployed Google Apps Script Web App URL
      * 
-     * @param {string} requestedBy - The name to validate
-     * @returns {Object} Validation result with isValid and error message
-     */
-    function validateRequestedBy(requestedBy) {
-      // Check if empty or only whitespace
-      if (!requestedBy || requestedBy.trim().length === 0) {
-        return {
-          isValid: false,
-          error: 'Requested By is required'
-        };
-      }
-      
-      // Check minimum length (at least 1 character after trim)
-      if (requestedBy.trim().length < 1) {
-        return {
-          isValid: false,
-          error: 'Name must be at least 1 character'
-        };
-      }
-      
-      // Check maximum length
-      if (requestedBy.length > 100) {
-        return {
-          isValid: false,
-          error: 'Name must not exceed 100 characters'
-        };
-      }
-      
-      return {
-        isValid: true,
-        error: ''
-      };
-    }
-
-    /**
-     * Validate assigned team field
-     * Requirements: Must be one of predefined values
+     * To get your URL:
+     * 1. Deploy your Apps Script as a Web App
+     * 2. Copy the Web App URL
+     * 3. Paste it here
      * 
-     * @param {string} assignedTeam - The team value to validate
-     * @returns {Object} Validation result with isValid and error message
+     * Example: 'https://script.google.com/macros/s/ABC123.../exec'
      */
-    function validateAssignedTeam(assignedTeam) {
-      const validTeams = ['Creatives', 'Dev'];
-      
-      // Check if empty
-      if (!assignedTeam || assignedTeam.trim().length === 0) {
-        return {
-          isValid: false,
-          error: 'Assigned Team is required'
-        };
+    const API_URL = 'YOUR_WEB_APP_URL_HERE';
+
+    // ========================================================================
+    // VALIDATION
+    // ========================================================================
+
+    function validateTaskName(value) {
+      if (!value || value.trim().length === 0) {
+        return 'Task name is required';
       }
-      
-      // Check if value is in predefined list
-      if (!validTeams.includes(assignedTeam)) {
-        return {
-          isValid: false,
-          error: 'Assigned Team must be Creatives or Dev'
-        };
+      if (value.length > 200) {
+        return 'Task name must not exceed 200 characters';
       }
-      
-      return {
-        isValid: true,
-        error: ''
-      };
+      return null;
     }
 
-    /**
-     * Validate task description field
-     * Requirements: Required field, must not exceed 1000 characters
-     * 
-     * @param {string} taskDescription - The description to validate
-     * @returns {Object} Validation result with isValid and error message
-     */
-    function validateTaskDescription(taskDescription) {
-      // Check if empty or only whitespace
-      if (!taskDescription || taskDescription.trim().length === 0) {
-        return {
-          isValid: false,
-          error: 'Task Description is required'
-        };
+    function validateDescription(value) {
+      if (value && value.length > 1000) {
+        return 'Description must not exceed 1000 characters';
       }
-      
-      // Check maximum length
-      if (taskDescription.length > 1000) {
-        return {
-          isValid: false,
-          error: 'Task Description must not exceed 1000 characters'
-        };
-      }
-      
-      return {
-        isValid: true,
-        error: ''
-      };
+      return null;
     }
 
-    /**
-     * Validate entire form
-     * Runs all field validations and returns overall result
-     * 
-     * @returns {Object} Validation result with isValid and errors object
-     */
-    function validateForm() {
-      const requestedBy = document.getElementById('requestedBy').value;
-      const assignedTeam = document.getElementById('assignedTeam').value;
-      const taskDescription = document.getElementById('taskDescription').value;
-      
-      const requestedByResult = validateRequestedBy(requestedBy);
-      const assignedTeamResult = validateAssignedTeam(assignedTeam);
-      const taskDescriptionResult = validateTaskDescription(taskDescription);
-      
-      const isValid = requestedByResult.isValid && 
-                      assignedTeamResult.isValid && 
-                      taskDescriptionResult.isValid;
-      
-      return {
-        isValid: isValid,
-        errors: {
-          requestedBy: requestedByResult.error,
-          assignedTeam: assignedTeamResult.error,
-          taskDescription: taskDescriptionResult.error
-        }
-      };
-    }
-
-    // ============================================================================
-    // UTILITY FUNCTIONS
-    // ============================================================================
-
-    /**
-     * Close message notification
-     * @param {string} messageId - ID of the message element to close
-     */
-    function closeMessage(messageId) {
-      document.getElementById(messageId).style.display = 'none';
-    }
-
-    /**
-     * Update character count for task description field
-     */
-    document.addEventListener('DOMContentLoaded', function() {
-      const taskDescriptionField = document.getElementById('taskDescription');
-      const charCount = document.getElementById('taskDescriptionCount');
-      
-      if (taskDescriptionField && charCount) {
-        taskDescriptionField.addEventListener('input', function() {
-          const currentLength = this.value.length;
-          charCount.textContent = currentLength + ' / 1000';
-          
-          // Visual feedback when approaching limit
-          if (currentLength > 900) {
-            charCount.style.color = '#ff0000';
-          } else if (currentLength > 800) {
-            charCount.style.color = '#ff8c00';
-          } else {
-            charCount.style.color = '#666';
-          }
-        });
+    function validatePriority(value) {
+      if (!value) {
+        return 'Priority is required';
       }
-    });
+      if (!['High', 'Medium', 'Low'].includes(value)) {
+        return 'Invalid priority value';
+      }
+      return null;
+    }
 
-    // ============================================================================
-    // VISUAL FEEDBACK FOR VALIDATION ERRORS
-    // ============================================================================
+    function validateUser(value) {
+      if (!value || value.trim().length === 0) {
+        return 'Assigned To is required';
+      }
+      return null;
+    }
 
-    /**
-     * Show error message for a field
-     * @param {string} fieldId - ID of the field
-     * @param {string} errorMessage - Error message to display
-     */
-    function showError(fieldId, errorMessage) {
+    function showError(fieldId, message) {
       const field = document.getElementById(fieldId);
       const errorElement = document.getElementById(fieldId + 'Error');
       
-      if (field && errorElement) {
-        field.classList.add('invalid');
-        errorElement.textContent = errorMessage;
-        errorElement.style.display = 'block';
-      }
+      field.classList.add('invalid');
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
     }
 
-    /**
-     * Hide error message for a field
-     * @param {string} fieldId - ID of the field
-     */
     function hideError(fieldId) {
       const field = document.getElementById(fieldId);
       const errorElement = document.getElementById(fieldId + 'Error');
       
-      if (field && errorElement) {
-        field.classList.remove('invalid');
-        errorElement.textContent = '';
-        errorElement.style.display = 'none';
-      }
+      field.classList.remove('invalid');
+      errorElement.textContent = '';
+      errorElement.style.display = 'none';
     }
 
-    /**
-     * Show warning message for a field
-     * @param {string} fieldId - ID of the field
-     * @param {string} warningMessage - Warning message to display
-     */
-    function showWarning(fieldId, warningMessage) {
-      const warningElement = document.getElementById(fieldId + 'Warning');
+    function validateForm() {
+      let isValid = true;
       
-      if (warningElement) {
-        warningElement.textContent = warningMessage;
-        warningElement.style.display = 'block';
-      }
-    }
-
-    /**
-     * Hide warning message for a field
-     * @param {string} fieldId - ID of the field
-     */
-    function hideWarning(fieldId) {
-      const warningElement = document.getElementById(fieldId + 'Warning');
-      
-      if (warningElement) {
-        warningElement.textContent = '';
-        warningElement.style.display = 'none';
-      }
-    }
-
-    /**
-     * Validate and show feedback for requested by field
-     */
-    function validateRequestedByField() {
-      const requestedBy = document.getElementById('requestedBy').value;
-      const result = validateRequestedBy(requestedBy);
-      
-      if (!result.isValid) {
-        showError('requestedBy', result.error);
+      // Validate task name
+      const taskNameError = validateTaskName(document.getElementById('taskName').value);
+      if (taskNameError) {
+        showError('taskName', taskNameError);
+        isValid = false;
       } else {
-        hideError('requestedBy');
+        hideError('taskName');
       }
       
-      return result.isValid;
-    }
-
-    /**
-     * Validate and show feedback for assigned team field
-     */
-    function validateAssignedTeamField() {
-      const assignedTeam = document.getElementById('assignedTeam').value;
-      const result = validateAssignedTeam(assignedTeam);
-      
-      if (!result.isValid) {
-        showError('assignedTeam', result.error);
+      // Validate description
+      const descriptionError = validateDescription(document.getElementById('description').value);
+      if (descriptionError) {
+        showError('description', descriptionError);
+        isValid = false;
       } else {
-        hideError('assignedTeam');
+        hideError('description');
       }
       
-      return result.isValid;
-    }
-
-    /**
-     * Validate and show feedback for task description field
-     */
-    function validateTaskDescriptionField() {
-      const taskDescription = document.getElementById('taskDescription').value;
-      const result = validateTaskDescription(taskDescription);
-      
-      if (!result.isValid) {
-        showError('taskDescription', result.error);
+      // Validate priority
+      const priorityError = validatePriority(document.getElementById('priority').value);
+      if (priorityError) {
+        showError('priority', priorityError);
+        isValid = false;
       } else {
-        hideError('taskDescription');
+        hideError('priority');
       }
       
-      return result.isValid;
-    }
-
-    // ============================================================================
-    // SUBMIT BUTTON ENABLE/DISABLE LOGIC
-    // ============================================================================
-
-    /**
-     * Check if all required fields are valid
-     * Requirements: Enable submit button only when all required fields are valid
-     * 
-     * @returns {boolean} True if form is valid and can be submitted
-     */
-    function isFormValid() {
-      const requestedBy = document.getElementById('requestedBy').value;
-      const assignedTeam = document.getElementById('assignedTeam').value;
-      const taskDescription = document.getElementById('taskDescription').value;
-      
-      // Validate all fields
-      const requestedByResult = validateRequestedBy(requestedBy);
-      const assignedTeamResult = validateAssignedTeam(assignedTeam);
-      const taskDescriptionResult = validateTaskDescription(taskDescription);
-      
-      // All required fields must be valid
-      return requestedByResult.isValid && 
-             assignedTeamResult.isValid && 
-             taskDescriptionResult.isValid;
-    }
-
-    /**
-     * Update submit button state based on form validity
-     * Enables button when all required fields are valid, disables otherwise
-     */
-    function updateSubmitButtonState() {
-      const submitBtn = document.getElementById('submitBtn');
-      
-      if (submitBtn) {
-        if (isFormValid()) {
-          submitBtn.disabled = false;
-        } else {
-          submitBtn.disabled = true;
-        }
+      // Validate user
+      const userError = validateUser(document.getElementById('user').value);
+      if (userError) {
+        showError('user', userError);
+        isValid = false;
+      } else {
+        hideError('user');
       }
+      
+      return isValid;
     }
 
-    /**
-     * Disable submit button during form submission
-     * Requirements: 4.5 - Disable during form submission
-     */
-    function disableSubmitButton() {
-      const submitBtn = document.getElementById('submitBtn');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-      }
-    }
+    // ========================================================================
+    // FORM SUBMISSION
+    // ========================================================================
 
-    /**
-     * Enable submit button after form submission completes
-     */
-    function enableSubmitButton() {
-      const submitBtn = document.getElementById('submitBtn');
-      if (submitBtn && isFormValid()) {
-        submitBtn.disabled = false;
-      }
-    }
-
-    // ============================================================================
-    // FORM SUBMISSION HANDLING
-    // ============================================================================
-
-    /**
-     * Handle form submission
-     * Requirements: 5.1, 5.2 - Process form submission and show loading indicator
-     */
-    function handleFormSubmit(event) {
+    async function handleSubmit(event) {
       event.preventDefault();
       
-      // Validate form before submission
-      const validation = validateForm();
-      if (!validation.isValid) {
-        // Show validation errors
-        if (validation.errors.requestedBy) showError('requestedBy', validation.errors.requestedBy);
-        if (validation.errors.assignedTeam) showError('assignedTeam', validation.errors.assignedTeam);
-        if (validation.errors.taskDescription) showError('taskDescription', validation.errors.taskDescription);
+      // Validate form
+      if (!validateForm()) {
         return;
       }
       
-      // Disable submit button during submission
-      disableSubmitButton();
+      // Check API URL is configured
+      if (API_URL === 'YOUR_WEB_APP_URL_HERE') {
+        showMessage('error', 'API URL not configured. Please update the API_URL in the script.');
+        return;
+      }
       
-      // Show loading indicator
-      document.getElementById('loadingIndicator').style.display = 'flex';
-      
-      // Hide any previous messages
-      document.getElementById('successMessage').style.display = 'none';
-      document.getElementById('errorMessage').style.display = 'none';
-      
-      // Collect form data into object
-      const formData = collectFormData();
-      
-      // Send data to Google Apps Script backend
-      submitTaskToBackend(formData);
-    }
-
-    /**
-     * Collect form data into a structured object
-     * Requirements: Collect form data into object
-     * 
-     * @returns {Object} Form data object with all field values
-     */
-    function collectFormData() {
-      return {
-        requestedBy: document.getElementById('requestedBy').value.trim(),
-        assignedTeam: document.getElementById('assignedTeam').value,
-        taskDescription: document.getElementById('taskDescription').value.trim()
+      // Collect form data
+      const formData = {
+        taskName: document.getElementById('taskName').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        priority: document.getElementById('priority').value,
+        user: document.getElementById('user').value.trim()
       };
-    }
-
-    /**
-     * Submit task data to Google Apps Script backend
-     * Requirements: 5.1 - Send data to Google Apps Script backend
-     * 
-     * @param {Object} formData - Task data to submit
-     */
-    function submitTaskToBackend(formData) {
-      // Check if we're running in Google Apps Script environment
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        // Use google.script.run for Google Apps Script environment
-        console.log('Using google.script.run to submit form');
-        console.log('Form data:', formData);
-        
-        google.script.run
-          .withSuccessHandler(handleSubmissionSuccess)
-          .withFailureHandler(handleSubmissionError)
-          .processFormSubmission(formData);
-      } else {
-        // Fallback to fetch for testing or when deployed as web app
-        const scriptUrl = window.location.href;
-        
-        // Create URL-encoded form data for POST request
-        const postData = new URLSearchParams();
-        postData.append('requestedBy', formData.requestedBy);
-        postData.append('assignedTeam', formData.assignedTeam);
-        postData.append('taskDescription', formData.taskDescription);
-        
-        // Send POST request to backend
-        fetch(scriptUrl, {
+      
+      // Show loading
+      document.getElementById('loadingIndicator').classList.add('show');
+      document.getElementById('submitBtn').disabled = true;
+      hideMessage('successMessage');
+      hideMessage('errorMessage');
+      
+      try {
+        // Send POST request to API
+        const response = await fetch(API_URL, {
           method: 'POST',
-          body: postData,
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        })
-        .then(function(response) {
-          // Check if response is HTML (error case)
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('text/html')) {
-            throw new Error('Received HTML response instead of JSON. Check if the web app is properly deployed.');
-          }
-          
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then(function(data) {
-          handleSubmissionSuccess(data);
-        })
-        .catch(function(error) {
-          handleSubmissionError(error);
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+          mode: 'no-cors' // Required for Google Apps Script
         });
-      }
-    }
-
-    /**
-     * Handle successful form submission
-     * Requirements: 5.3, 5.5 - Display success message and clear form
-     * 
-     * @param {Object} response - Response data from backend
-     */
-    function handleSubmissionSuccess(response) {
-      // Hide loading indicator
-      document.getElementById('loadingIndicator').style.display = 'none';
-      
-      // Log the response for debugging
-      console.log('Received response:', response);
-      console.log('Response type:', typeof response);
-      
-      // Check if response is valid
-      if (!response || typeof response !== 'object') {
-        console.error('Invalid response format');
-        handleSubmissionError(new Error('Invalid response from server'));
-        return;
-      }
-      
-      if (response.success) {
-        console.log('Submission successful!');
+        
+        // Note: With no-cors mode, we can't read the response
+        // We assume success if no error is thrown
+        console.log('Request sent successfully');
+        
         // Show success message
-        const successMessage = document.getElementById('successMessage');
-        const successText = successMessage.querySelector('.message-text');
-        successText.textContent = response.message || 'Task request submitted successfully!';
-        successMessage.style.display = 'flex';
+        showMessage('success', 'Task created successfully! Check your spreadsheet for confirmation.');
         
-        // Clear form fields
+        // Reset form
         document.getElementById('taskForm').reset();
+        document.getElementById('descriptionCount').textContent = '0 / 1000';
         
-        // Reset character count
-        document.getElementById('taskDescriptionCount').textContent = '0 / 1000';
-        document.getElementById('taskDescriptionCount').style.color = '#666';
-        
-        // Clear any validation errors
-        hideError('requestedBy');
-        hideError('assignedTeam');
-        hideError('taskDescription');
-        
-        // Update submit button state
-        updateSubmitButtonState();
-      } else {
-        console.log('Submission failed on server');
-        console.log('Server message:', response.message);
-        console.log('Server errors:', response.errors);
-        
-        // Show error message even if response says not successful
-        const errorMsg = response.message || 'Submission failed';
-        const errors = response.errors || [];
-        
-        let fullErrorMsg = errorMsg;
-        if (errors.length > 0) {
-          fullErrorMsg += '\n\nErrors:\n';
-          errors.forEach(function(error) {
-            if (typeof error === 'object' && error.field && error.message) {
-              fullErrorMsg += '- ' + error.field + ': ' + error.message + '\n';
-            } else if (typeof error === 'string') {
-              fullErrorMsg += '- ' + error + '\n';
-            }
-          });
-        }
-        
-        handleSubmissionError(new Error(fullErrorMsg));
-      }
-    }ccess: false
-        handleSubmissionError(new Error(response.message || 'Submission failed'));
+      } catch (error) {
+        console.error('Error submitting task:', error);
+        showMessage('error', 'Failed to create task. Please try again. Error: ' + error.message);
+      } finally {
+        // Hide loading
+        document.getElementById('loadingIndicator').classList.remove('show');
+        document.getElementById('submitBtn').disabled = false;
       }
     }
 
-    /**
-     * Handle form submission error
-     * Requirements: 5.4 - Display error message with details
-     * 
-     * @param {Error|string} error - Error object or message
-     */
-    function handleSubmissionError(error) {
-      // Hide loading indicator
-      document.getElementById('loadingIndicator').style.display = 'none';
+    // ========================================================================
+    // UI HELPERS
+    // ========================================================================
+
+    function showMessage(type, text) {
+      const messageId = type === 'success' ? 'successMessage' : 'errorMessage';
+      const messageEl = document.getElementById(messageId);
+      const textEl = messageEl.querySelector('.message-text');
       
-      // Convert error to string if it's an Error object
-      let errorMessage = '';
-      if (error && typeof error === 'object' && error.message) {
-        errorMessage = error.message;
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-      } else {
-        errorMessage = 'An unknown error occurred';
-      }
-      
-      // Show error message with helpful guidance
-      const errorMessageEl = document.getElementById('errorMessage');
-      const errorText = errorMessageEl.querySelector('.message-text');
-      
-      let errorMsg = 'Failed to submit request: ' + errorMessage;
-      
-      // Add specific guidance for common issues
-      if (errorMessage.includes('HTML response instead of JSON')) {
-        errorMsg += '\n\nThis usually means the Google Apps Script web app is not properly deployed. Please ensure:\n1. The script is deployed as a web app\n2. Execute as: "Me"\n3. Who has access: "Anyone" or "Anyone with the link"\n4. You are accessing the deployed web app URL, not the script editor URL';
-      } else if (errorMessage.includes('Network response was not ok')) {
-        errorMsg += '\n\nPlease check your internet connection and try again.';
-      } else if (errorMessage.includes('Could not access spreadsheet')) {
-        errorMsg += '\n\nPlease ensure:\n1. A SPREADSHEET_ID is configured in Script Properties, OR\n2. The script has permission to create a new spreadsheet\n3. Check the execution logs for more details';
-      }
-      
-      errorText.textContent = errorMsg;
-      errorMessageEl.style.display = 'flex';
-      
-      // Re-enable submit button for retry
-      enableSubmitButton();
-      
-      // Log error for debugging
-      console.error('Form submission error:', error);
-      console.log('Error type:', typeof error);
-      console.log('Error details:', error);
-      console.log('Current URL:', window.location.href);
-      console.log('Google Apps Script available:', typeof google !== 'undefined' && google.script);
+      textEl.textContent = text;
+      messageEl.classList.add('show');
     }
 
-    /**
-     * Attach validation event listeners to form fields
-     */
+    function hideMessage(messageId) {
+      document.getElementById(messageId).classList.remove('show');
+    }
+
+    function closeMessage(messageId) {
+      hideMessage(messageId);
+    }
+
+    function updateCharCount() {
+      const description = document.getElementById('description');
+      const charCount = document.getElementById('descriptionCount');
+      const currentLength = description.value.length;
+      
+      charCount.textContent = currentLength + ' / 1000';
+      
+      if (currentLength > 900) {
+        charCount.style.color = '#ff0000';
+      } else if (currentLength > 800) {
+        charCount.style.color = '#ff8c00';
+      } else {
+        charCount.style.color = '#718096';
+      }
+    }
+
+    // ========================================================================
+    // EVENT LISTENERS
+    // ========================================================================
+
     document.addEventListener('DOMContentLoaded', function() {
-      const requestedByField = document.getElementById('requestedBy');
-      const assignedTeamField = document.getElementById('assignedTeam');
-      const taskDescriptionField = document.getElementById('taskDescription');
-      const form = document.getElementById('taskForm');
+      // Form submission
+      document.getElementById('taskForm').addEventListener('submit', handleSubmit);
       
-      // Initialize submit button state on page load
-      updateSubmitButtonState();
+      // Character count
+      document.getElementById('description').addEventListener('input', updateCharCount);
       
-      // Attach form submit handler
-      if (form) {
-        form.addEventListener('submit', handleFormSubmit);
-      }
+      // Real-time validation
+      document.getElementById('taskName').addEventListener('blur', function() {
+        const error = validateTaskName(this.value);
+        if (error) {
+          showError('taskName', error);
+        } else {
+          hideError('taskName');
+        }
+      });
       
-      // Requested By validation on blur and input
-      if (requestedByField) {
-        requestedByField.addEventListener('blur', function() {
-          validateRequestedByField();
-          updateSubmitButtonState();
-        });
-        requestedByField.addEventListener('input', function() {
-          // Only validate if field has been touched (has error class)
-          if (this.classList.contains('invalid')) {
-            validateRequestedByField();
-          }
-          updateSubmitButtonState();
-        });
-      }
+      document.getElementById('priority').addEventListener('change', function() {
+        const error = validatePriority(this.value);
+        if (error) {
+          showError('priority', error);
+        } else {
+          hideError('priority');
+        }
+      });
       
-      // Assigned Team validation on change
-      if (assignedTeamField) {
-        assignedTeamField.addEventListener('change', function() {
-          validateAssignedTeamField();
-          updateSubmitButtonState();
-        });
-        assignedTeamField.addEventListener('blur', function() {
-          validateAssignedTeamField();
-          updateSubmitButtonState();
-        });
-      }
-      
-      // Task Description validation on input
-      if (taskDescriptionField) {
-        taskDescriptionField.addEventListener('input', function() {
-          validateTaskDescriptionField();
-          updateSubmitButtonState();
-        });
-        taskDescriptionField.addEventListener('blur', function() {
-          validateTaskDescriptionField();
-          updateSubmitButtonState();
-        });
-      }
+      document.getElementById('user').addEventListener('blur', function() {
+        const error = validateUser(this.value);
+        if (error) {
+          showError('user', error);
+        } else {
+          hideError('user');
+        }
+      });
     });
   </script>
 </body>
