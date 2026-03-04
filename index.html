@@ -338,6 +338,8 @@
           <option value="">Select team</option>
           <option value="Creatives">Creatives</option>
           <option value="Dev">Dev</option>
+          <option value="Operations">Operations</option>
+          <option value="Marketing">Marketing</option>
         </select>
         <span class="error-message" id="assignedTeamError"></span>
       </div>
@@ -354,6 +356,17 @@
         ></textarea>
         <span class="char-count" id="taskDescriptionCount">0 / 1000</span>
         <span class="error-message" id="taskDescriptionError"></span>
+      </div>
+
+      <!-- Status -->
+      <div class="form-group">
+        <label for="status">Status <span class="required">*</span></label>
+        <select id="status" name="status" required>
+          <option value="Pending" selected>Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Done">Done</option>
+        </select>
+        <span class="error-message" id="statusError"></span>
       </div>
 
       <!-- Form Actions -->
@@ -403,7 +416,7 @@
      * 
      * Example: 'https://script.google.com/macros/s/ABC123.../exec'
      */
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyu00xDXJartbe6_LY55SeAjtQU9wy6uixtMev0y-ueXVf5l8p-W57-PEyw4oMM8Cl4/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwSOZd8PHiixdkXSsSazfh7PReR0X7uKflh6SDTB9NsPRosYWipiI-8qk6DXS8uIqpl/exec';
 
     // ========================================================================
     // VALIDATION
@@ -423,7 +436,7 @@
       if (!value) {
         return 'Assigned Team is required';
       }
-      if (!['Creatives', 'Dev'].includes(value)) {
+      if (!['Creatives', 'Dev', 'Operations', 'Marketing'].includes(value)) {
         return 'Invalid team selection';
       }
       return null;
@@ -435,6 +448,16 @@
       }
       if (value.length > 1000) {
         return 'Task Description must not exceed 1000 characters';
+      }
+      return null;
+    }
+
+    function validateStatus(value) {
+      if (!value) {
+        return 'Status is required';
+      }
+      if (!['Pending', 'In Progress', 'Done'].includes(value)) {
+        return 'Invalid status selection';
       }
       return null;
     }
@@ -487,6 +510,15 @@
         hideError('taskDescription');
       }
       
+      // Validate status
+      const statusError = validateStatus(document.getElementById('status').value);
+      if (statusError) {
+        showError('status', statusError);
+        isValid = false;
+      } else {
+        hideError('status');
+      }
+      
       return isValid;
     }
 
@@ -512,7 +544,8 @@
       const formData = {
         requestedBy: document.getElementById('requestedBy').value.trim(),
         assignedTeam: document.getElementById('assignedTeam').value,
-        taskDescription: document.getElementById('taskDescription').value.trim()
+        taskDescription: document.getElementById('taskDescription').value.trim(),
+        status: document.getElementById('status').value
       };
       
       // Show loading
@@ -628,9 +661,16 @@
           hideError('taskDescription');
         }
       });
+      
+      document.getElementById('status').addEventListener('change', function() {
+        const error = validateStatus(this.value);
+        if (error) {
+          showError('status', error);
+        } else {
+          hideError('status');
+        }
+      });
     });
   </script>
 </body>
 </html>
-
-
